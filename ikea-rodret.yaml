@@ -2,7 +2,7 @@ blueprint:
   name: IKEA Rodret Switch
   description: Automate your IKEA Rodret Switch using ZHA events.
   domain: automation
-  source_url: https://gitlab.com/dsample/home-assistant-blueprints/-/blob/main/ikea-rodret.yaml
+  source_url: https://github.com/dsample/ha-blueprints/blob/main/ikea-rodret.yaml
   input:
     device:
       name: IKEA Rodret Switch
@@ -13,7 +13,7 @@ blueprint:
           manufacturer: IKEA of Sweden
           model: RODRET Dimmer
     on_press:
-      name: Press the 'on' button,
+      name: Press the 'on' button
       description: Action to run when the on button is pressed
       default: []
       selector:
@@ -31,7 +31,7 @@ blueprint:
     #   selector:
     #      action: {} 
     off_press:
-      name: Press the 'off' button,
+      name: Press the 'off' button
       description: Action to run when the off button is pressed
       default: []
       selector:
