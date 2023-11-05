@@ -1,0 +1,76 @@
+blueprint:
+  name: IKEA Rodret Switch
+  description: Automate your IKEA Rodret Switch using ZHA events.
+  domain: automation
+  source_url: https://gitlab.com/dsample/home-assistant-blueprints/-/blob/main/ikea-rodret.yaml
+  input:
+    device:
+      name: IKEA Rodret Switch
+      description: Select the IKEA Rodret switch to automate
+      selector:
+        device:
+          integration: zha
+          manufacturer: IKEA of Sweden
+          model: RODRET Dimmer
+    on_press:
+      name: Press the 'on' button,
+      description: Action to run when the on button is pressed
+      default: []
+      selector:
+        action: {}
+    on_hold:
+      name: Hold the 'on' button
+      description: Action to run when you hold down the on button
+      default: []
+      selector:
+        action: {}
+    # on_release:
+    #   name: Release the 'on' button
+    #   description: Action to run after releasing the 'on' button, after holding it down
+    #   default: []
+    #   selector:
+    #      action: {} 
+    off_press:
+      name: Press the 'off' button,
+      description: Action to run when the off button is pressed
+      default: []
+      selector:
+        action: {}
+    off_hold:
+      name: Hold the 'off' button
+      description: Action to run when you hold down the off button
+      default: []
+      selector:
+        action: {}
+    # off_release:
+    #   name: Release the 'off' button
+    #   description: Action to run after releasing the 'off' button, after holding it down
+    #   default: []
+    #   selector:
+    #      action: {} 
+mode: restart
+max_exceeded: silent
+trigger:
+- platform: event
+  event_type: zha_event
+  event_data:
+    device_id: !input 'device'
+action:
+- variables:
+    command: '{{ trigger.event.data.command }}'   
+    endpoint_id: '{{ trigger.event.data.endpoint_id }}'
+    cluster_id: '{{ trigger.event.data.cluster_id }}'
+- choose:
+  - conditions: "{{ command == 'on' }}"
+    sequence: !input 'on_press'
+  - conditions: "{{ command == 'move_with_on_off' }}"
+    sequence: !input 'on_hold'
+#   - conditions: "{{ command == 'stop_with_on_off' }}"
+#     sequence: !input 'on_release'
+
+  - conditions: "{{ command == 'off' }}"
+    sequence: !input 'off_press'
+  - conditions: "{{ command == 'move' }}"
+    sequence: !input 'off_hold'
+#   - conditions: "{{ command == 'stop_with_on_off' }}"
+#     sequence: !input 'off_release'
